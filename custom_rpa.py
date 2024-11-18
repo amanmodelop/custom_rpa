@@ -18,7 +18,7 @@ def table_structure(f1:pd.DataFrame,fold_name):
             m=re.search(r'OPX\w*',ref_link)
             id=m.group()
             if key not in {"reference","test"}:
-                dict_to_add={"id":id,"fold":fold_name}
+                dict_to_add={"id":id,"fold":fold_name,"contour":key}
                 dict_to_add.update(contour_dict[key])
                 table.append(dict_to_add)
     return table    
