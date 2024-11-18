@@ -41,9 +41,11 @@ def init(init_param):
 
 # modelop.metrics
 def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
+    print(table_structure(fold1,"fold1"))
     logger.info("Running the metrics function")
     folds=[fold1,fold2,fold3]
     final_table=table_structure(fold1,"fold1")+table_structure(fold2,"fold2")+table_structure(fold3,"fold3")
+    print(final_table)
     yield final_table
 
 #
