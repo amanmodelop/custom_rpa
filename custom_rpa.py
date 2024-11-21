@@ -76,7 +76,7 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     df_avg=df.iloc[:,3:].agg(["mean"])
     df_avg=df_avg.rename(columns=lambda col:f'mean_{col}')
     summary_table=df_avg.to_dict(orient="index")["mean"]
-    summary_table.update({"metrics table":final_table})
+    summary_table.update({"metrics table":[final_table]})
     print(summary_table)
     yield summary_table
 
