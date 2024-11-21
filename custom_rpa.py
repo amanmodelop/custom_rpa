@@ -21,7 +21,26 @@ def table_structure(f1:pd.DataFrame,fold_name):
                 dict_to_add={"id":id,"fold":fold_name,"contour":key}
                 dict_to_add.update(contour_dict[key])
                 table.append(dict_to_add)
-    return table    
+    return table  
+
+def data_frame_per_fold(f1,fold_name): #f1 is output from metrics for the given fold
+    df_fold=pd.DataFrame()
+    res1=f1.loc[f1.index[0]].results
+    for contour_dict in res1:
+        for key,val in contour_dict.items():
+            ref_link=contour_dict["test"]
+            m=re.search(r'OPX\w*',ref_link)
+            id=m.group()
+            if key not in {"reference","test"}:
+                contour=key
+                for metric,value in val.items():
+                    val[metric]=[value]
+                #data={"Id":id,"Contour":contour,"fold_name":fold_name,"metrics":val}
+                keys_to_be_added=["Id","Contour","fold_name"]
+                dict_fold={"Id":id,"Contour":contour,"fold_name":fold_name}
+                dict_fold.update(val)
+                df_fold=pd.concat([df_fold,pd.DataFrame(dict_fold)],ignore_index=True)
+    return df_fold  
 # modelop.init
 def init(init_param):
 	logger = utils.configure_logger()
@@ -43,9 +62,20 @@ def init(init_param):
 def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     logger.info("Running the metrics function")
     folds=[fold1,fold2,fold3]
-    table=table_structure(fold1,"fold1")+table_structure(fold2,"fold2")+table_structure(fold3,"fold3")
+    fold_names=["fold1","fold2","fold3"]
+    table=table_structure(fold1,fold_names[0])+table_structure(fold2,fold_names[0])+table_structure(fold3,fold_names[0])
     final_table={"rpa table":table}
-    yield final_table
+
+    df1=data_frame_per_fold(fold1,fold_names[0])
+    df2=data_frame_per_fold(fold2,fold_names[1])
+    df3=data_frame_per_fold(fold3,fold_names[0])
+
+    df=pd.concat([df1,df2,df3])
+    df_avg=df.iloc[:,3:].agg(["mean"])
+    df_avg=df_avg.rename(columns=lambda col:f'mean_{col}')
+    summary_table=df_avg.to_dict(orient="index")["mean"]
+    final_tables=summary_table.update({"metrics table":final_table})
+    yield final_tables
 
 #
 # This main method is utilized to simulate what the engine will do when calling the above metrics function.  It takes
@@ -54,12 +84,15 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
 # locally first and ensure the python is behaving correctly before deploying on a ModelOp engine.
 #
 def main():
-	with open("example_model_test_result.json", "r") as f:
-		contents = f.read()
-	data_dict = json.loads(contents)
-	df = pd.DataFrame.from_dict([data_dict])
-	print(next(metrics(df)))
-	#print(metrics(df))
+    raw_json=Path('example_job.json').read_text()
+    init_param={'rawJson':raw_json}
+    init(init_param)
+    data = {"data1":993,"data2":36,"data3":3959,"label_value":0,"score":1}
+    df1 = pd.DataFrame.from_dict([data])
+    df2=df1
+    df3=df2
+    print(json.dumps(next(metrics(df1,df2,df3)), indent=2))
+
 
 
 if __name__ == '__main__':
