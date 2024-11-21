@@ -1,6 +1,8 @@
 import json
 import pandas as pd
 import modelop.utils as utils
+from pathlib import Path
+
 import re,os
 
 logger = utils.configure_logger()
@@ -74,8 +76,9 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     df_avg=df.iloc[:,3:].agg(["mean"])
     df_avg=df_avg.rename(columns=lambda col:f'mean_{col}')
     summary_table=df_avg.to_dict(orient="index")["mean"]
-    final_tables=summary_table.update({"metrics table":final_table})
-    yield final_tables
+    summary_table.update({"metrics table":final_table})
+    print(summary_table)
+    yield summary_table
 
 #
 # This main method is utilized to simulate what the engine will do when calling the above metrics function.  It takes
@@ -91,7 +94,7 @@ def main():
     df1 = pd.DataFrame.from_dict([data])
     df2=df1
     df3=df2
-    print(json.dumps(next(metrics(df1,df2,df3)), indent=2))
+    print(json.dumps(metrics(df1,df2,df3)))
 
 
 
