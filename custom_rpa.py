@@ -73,12 +73,8 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
 
     df=pd.concat([df1,df2,df3])
     df=df.rename(columns=lambda col:f'mean_{col}')
-    a=df.iloc[:,3:].mean(axis=0)
-    avg_metrics=a.to_dict()
-    #summary_table=df_avg.to_dict(orient="index")["mean"]
-    #final_table.update(summary_table)
-    #summary_table["rpa table"]=[table]
-    #print(summary_table)
+    avg=df.iloc[:,3:].mean(axis=0)
+    avg_metrics=avg.to_dict()
     final_table=avg_metrics
     final_table["rpa table"]=table
 
