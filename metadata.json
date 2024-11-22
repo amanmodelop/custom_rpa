@@ -1,0 +1,8 @@
+{
+    "tags": [],
+    "name": "RPA Model Monitoring",
+    "description": "Monitor the metrics for the given model",
+    "modelCategory": "MODEL_MONITORING_MODEL",
+    "defaultAssociationRole": "METRICS_MODEL",
+    "frequentlyUsed": true
+}

@@ -1,0 +1,33 @@
+[
+    {
+        "usage": "INPUT_ASSET",
+        "metaData": {
+            "description": "Please add the fold_0 summary file"
+        }
+    },
+    {
+        "usage": "INPUT_ASSET",
+        "metaData": {
+            "description": "Please add the fold_1 summary file"
+        }
+    },
+    {
+        "usage": "INPUT_ASSET",
+        "metaData": {
+            "description": "Please add the fold_2 summary file"
+        }
+    },
+    {
+        "usage": "INPUT_ASSET",
+        "metaData": {
+            "description": "Please add the fold_3 summary file"
+        }
+    },
+    {
+        "usage": "INPUT_ASSET",
+        "metaData": {
+            "description": "Please add the fold_4 summary file"
+        }
+    }
+    
+]
