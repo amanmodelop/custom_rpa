@@ -79,7 +79,7 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     #summary_table["rpa table"]=[table]
     #print(summary_table)
     summary_table={}
-    summary_table["rpa table"]=[table]
+    summary_table["rpa table"]=table
 
     yield summary_table
 
