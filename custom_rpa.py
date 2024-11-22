@@ -61,17 +61,20 @@ def init(init_param):
 #
 
 # modelop.metrics
-def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
+def metrics(fold0: pd.DataFrame,fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame,fold4: pd.DataFrame):
     logger.info("Running the metrics function")
-    folds=[fold1,fold2,fold3]
-    fold_names=["fold1","fold2","fold3"]
-    table=table_structure(fold1,fold_names[0])+table_structure(fold2,fold_names[0])+table_structure(fold3,fold_names[0])
+    folds=[fold0,fold1,fold2,fold3,fold4]
+    fold_names=["fold0","fold1","fold2","fold3","fold4"]
+    table=table_structure(fold0,fold_names[0])+table_structure(fold1,fold_names[1])+table_structure(fold2,fold_names[2])+table_structure(fold3,fold_names[3])+table_structure(fold4,fold_names[4])
 
-    df1=data_frame_per_fold(fold1,fold_names[0])
-    df2=data_frame_per_fold(fold2,fold_names[1])
-    df3=data_frame_per_fold(fold3,fold_names[0])
+    df0=data_frame_per_fold(fold0,fold_names[0])
+    df1=data_frame_per_fold(fold1,fold_names[1])
+    df2=data_frame_per_fold(fold2,fold_names[2])
+    df3=data_frame_per_fold(fold3,fold_names[3])
+    df4=data_frame_per_fold(fold4,fold_names[4])
 
-    df=pd.concat([df1,df2,df3])
+
+    df=pd.concat([df0,df1,df2,df3,df4])
     df=df.rename(columns=lambda col:f'mean_{col}')
     avg=df.iloc[:,3:].mean(axis=0)
     avg_metrics=avg.to_dict()
