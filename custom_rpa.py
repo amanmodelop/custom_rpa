@@ -77,6 +77,7 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     summary_table=df_avg.to_dict(orient="index")["mean"]
     #final_table.update(summary_table)
     summary_table["rpa table"]=[table]
+    print(summary_table)
     yield summary_table
 
 #
