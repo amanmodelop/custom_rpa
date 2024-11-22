@@ -66,7 +66,6 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     folds=[fold1,fold2,fold3]
     fold_names=["fold1","fold2","fold3"]
     table=table_structure(fold1,fold_names[0])+table_structure(fold2,fold_names[0])+table_structure(fold3,fold_names[0])
-    final_table={"rpa table":table}
 
     df1=data_frame_per_fold(fold1,fold_names[0])
     df2=data_frame_per_fold(fold2,fold_names[1])
@@ -76,8 +75,8 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     df_avg=df.iloc[:,3:].agg(["mean"])
     df_avg=df_avg.rename(columns=lambda col:f'mean_{col}')
     summary_table=df_avg.to_dict(orient="index")["mean"]
-    summary_table.update({"metrics table":[final_table]})
-    print(summary_table)
+    #final_table.update(summary_table)
+    summary_table["rpa table"]=[table]
     yield summary_table
 
 #
@@ -90,11 +89,11 @@ def main():
     raw_json=Path('example_job.json').read_text()
     init_param={'rawJson':raw_json}
     init(init_param)
-    data = {"data1":993,"data2":36,"data3":3959,"label_value":0,"score":1}
-    df1 = pd.DataFrame.from_dict([data])
+    df1 = pd.read_json("summary_test.json")
+    #df1 = pd.DataFrame.from_dict([data])
     df2=df1
     df3=df2
-    print(json.dumps(metrics(df1,df2,df3)))
+    print(json.dumps(next(metrics(df1,df2,df3))))
 
 
 
