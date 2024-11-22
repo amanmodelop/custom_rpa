@@ -72,16 +72,17 @@ def metrics(fold1: pd.DataFrame,fold2: pd.DataFrame,fold3: pd.DataFrame):
     df3=data_frame_per_fold(fold3,fold_names[0])
 
     df=pd.concat([df1,df2,df3])
-    df_avg=df.iloc[:,3:].agg(["mean"])
-    df_avg=df_avg.rename(columns=lambda col:f'mean_{col}')
+    df=df.rename(columns=lambda col:f'mean_{col}')
+    a=df.iloc[:,3:].mean(axis=0)
+    avg_metrics=a.to_dict()
     #summary_table=df_avg.to_dict(orient="index")["mean"]
     #final_table.update(summary_table)
     #summary_table["rpa table"]=[table]
     #print(summary_table)
-    summary_table={}
-    summary_table["rpa table"]=table
+    final_table=avg_metrics
+    final_table["rpa table"]=table
 
-    yield summary_table
+    yield final_table
 
 #
 # This main method is utilized to simulate what the engine will do when calling the above metrics function.  It takes
@@ -97,8 +98,7 @@ def main():
     #df1 = pd.DataFrame.from_dict([data])
     df2=df1
     df3=df2
-    print(json.dumps(next(metrics(df1,df2,df3))))
-
+    print(json.dumps(metrics(df1,df2,df3)))
 
 
 if __name__ == '__main__':
